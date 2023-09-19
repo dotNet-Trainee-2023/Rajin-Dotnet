@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "hX3ntQK/a/wqvlOz5KpIkdbzBvvf3svTISF0XsAxltBEXEyMHGaFU/mTRrM+smmlJQt4qVU+bLUvy/G7NwT+6w==",
+  "success": true,
+  "projectFilePath": "D:\\Dotnet\\Assignment2\\Assignment2\\Assignment2.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rajin.maharjan\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
