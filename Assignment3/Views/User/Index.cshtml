@@ -1,0 +1,49 @@
+﻿@model List<User>
+
+@{
+}
+
+<h1>User List</h1>
+
+<a asp-action="Create" class="btn btn-primary">Add User</a>
+<div><b>User list</b><br /></div>
+<table class="table table-bordered table-responsive table-hover">
+    <tr>
+        <th>Id </th>
+        <th>Name </th>
+        <th>Email</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>Action</th>
+    </tr>
+    @foreach (User user in Model)
+    {
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+            <td>@user.PhoneNumber</td>
+            <td>@user.Address</td>
+            <td>
+                <a class="btn btn-success" asp-action="Edit" asp-route-index="@user.Id">Edit</a>
+                <a class="btn btn-danger deleteBtn" data-id="@user.Id" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
+
+@section Scripts {
+    <script>
+        $(".deleteBtn").on("click", function (e) {
+            e.preventDefault();
+            const id = $(this).attr("data-id");
+            $.ajax({
+                url: "/User/Delete/" + id,
+                method: "POST",
+                success: function() {
+                    location.href = '/User'
+                }
+            });
+        })
+    </script>
+}
