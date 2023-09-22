@@ -1,7 +1,8 @@
-using Assignment3.Data;
 using Assignment3.Services;
+using Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
+using Repositories.Contracts;
+using Repositories.Repos;
 
 namespace Assignment3
 {
@@ -17,6 +18,8 @@ namespace Assignment3
                 options.UseSqlite(builder.Configuration.GetConnectionString("SqliteConnection")));
 
             builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             var app = builder.Build();
 

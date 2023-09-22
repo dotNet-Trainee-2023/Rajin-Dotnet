@@ -1,21 +1,27 @@
-﻿using Assignment3.Models;
-using Assignment3.Services;
+﻿using Assignment3.Services;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Repositories.Contracts;
+using System.Threading.Tasks;
 
 namespace Assignment3.Controllers
 {
     public class UserController : Controller
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UserController(IUserService userService, IUnitOfWork unitOfWork)
         {  
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService)); 
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult>  Index()
         {
-            var users = _userService.GetUsers();
+            var users = await _unitOfWork.Users.GetAllAsync();
+            //var users = _userService.GetUsers();
             return View(users);
         }
 
@@ -26,21 +32,22 @@ namespace Assignment3.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(User user)
+        public async Task<IActionResult> Create(User user)
         {
             if (!ModelState.IsValid)
             {
                 return View(user);
             }
-
-            _userService.CreateUser(user);
+            // _userService.CreateUser(user);
+            await _unitOfWork.Users.CreateAsync(user);
 
             return RedirectToAction("Index", "User");
         }
 
-        public IActionResult Edit(int index)
+        public async Task<IActionResult> Edit(int index)
         {
-            var employee = _userService.GetUser(index);
+            var employee = await _unitOfWork.Users.GetByIdAsync(index);
+            //var employee = _userService.GetUser(index);
             return View(employee);
         }
 
@@ -51,16 +58,18 @@ namespace Assignment3.Controllers
             {
                 return View(model);
             }            
-
-            _userService.UpdateUser(model);
+            _unitOfWork.Users.Update(model);
+//            _userService.UpdateUser(model);
 
             return RedirectToAction("Index", "User");
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult>  Delete(int id)
         {
-            _userService.DeleteUser(id);
+            User user = await _unitOfWork.Users.GetByIdAsync(id);
+            _unitOfWork.Users.Delete(user);
+            //_userService.DeleteUser(id);
             return RedirectToAction("Index");
         }
     }
